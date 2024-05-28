@@ -27,42 +27,43 @@ class GraphQLCompleteIndex implements Field
             'resolve' => static function ($source, array $args, $context, ResolveInfo $info) use ($driver) {
                 return [
                     [
-                        'query' => 'query ArtistsPerformancesSources {
-                          artists {
-                            edges {
-                              node {
-                                name
-                                performances {
-                                  totalCount
-                                  edges {
-                                    node {
-                                      date
-                                      venue
-                                      recordings {
-                                        edges {
-                                          node {
-                                            source
-                                            id
-                                            users {
-                                              edges {
-                                                node {
-                                                  name
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                            pageInfo {
-                              endCursor
-                            }
-                          }
-                        }',
+                        'query' => '
+query ArtistsPerformancesSources ($cursor:String!) {
+  artists (pagination: {first:10, after:$cursor}) {
+    edges {
+      node {
+        name
+        performances {
+          totalCount
+          edges {
+            node {
+              date
+              venue
+              recordings {
+                edges {
+                  node {
+                    source
+                    id
+                    users {
+                      edges {
+                        node {
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+    }
+  }
+}',
                         'description' => 'Artists performances and recordings',
                         'hasCursor' => true,
                         'cursorDataType' => null,
